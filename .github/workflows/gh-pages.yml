@@ -1,0 +1,53 @@
+##### GitHub CI configuration #####
+##### See: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs #####
+
+name: Publishes Typedoc documentation in GitHub pages
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+          - 25.x
+    name: Publishing with Node.js ${{ matrix.node-version }}
+    steps:
+      - uses: actions/checkout@v6.0.2
+      - uses: actions/setup-node@v6.2.0
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - run: npm ci
+      - run: npm run build --if-present
+      - run: npm run doc
+      - uses: actions/upload-artifact@v6.0.0
+        with:
+          name: public
+          path: ./public
+  deploy:
+    needs: build
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+        with:
+          ref: gh-pages
+          repository: ${{ github.repository }}
+          token: ${{ github.token }}
+      - run: rm -rf ./public  # This will remove all existing files in the gh-pages branch
+      - uses: actions/download-artifact@v7.0.0
+        with:
+          name: public
+          path: ./public
+      - run: cp LICENSE ./public/LICENSE
+      - run: |
+          git config user.name ${{ github.actor }}
+          git config user.email ${{ secrets.ACTOR_EMAIL }}
+          git add .
+          git commit -m "Deploy TypeDoc documentation"
+          git push origin gh-pages
