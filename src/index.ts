@@ -1,12 +1,3 @@
-/**
- * Application entry point module.
- *
- * Provides process initialization with startup logging and signal handling
- * for graceful shutdown.
- *
- * @module
- */
-
 import process, { env, execArgv, pid, title } from "node:process"
 import pkg from "../package.json" with { type: "json" }
 
