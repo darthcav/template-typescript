@@ -1,10 +1,33 @@
+/**
+ * Application entry point module.
+ *
+ * Provides process initialization with startup logging and signal handling
+ * for graceful shutdown.
+ *
+ * @module
+ */
+
 import process, { env, execArgv, pid, title } from "node:process"
 import pkg from "../package.json" with { type: "json" }
 
 /**
- * Main entry point for the application.
- * Initializes the process, logs startup information, and sets up signal handlers
- * for graceful shutdown and error handling.
+ * Initializes the process by logging startup information and registering
+ * signal handlers for graceful shutdown and error handling.
+ *
+ * @remarks
+ * Registers handlers for:
+ * - `SIGINT` — graceful shutdown on Ctrl+C
+ * - `uncaughtException` — logs and exits on unhandled exceptions
+ * - `unhandledRejection` — logs and exits on unhandled promise rejections
+ *
+ * All diagnostic output is written to `stderr` via `console.error`.
+ *
+ * @example
+ * ```ts
+ * import main from "./index.ts"
+ *
+ * main()
+ * ```
  */
 export default function main(): void {
     // Log process startup information

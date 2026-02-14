@@ -1,6 +1,6 @@
 {
     "$schema": "https://typedoc.org/schema.json",
-    "entryPoints": ["./src/start.ts"],
+    "entryPoints": ["./src/index.ts"],
     "out": "./public",
     "readme": "README.md",
     "highlightLanguages": [
