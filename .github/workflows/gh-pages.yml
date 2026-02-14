@@ -5,12 +5,10 @@ name: Publishes TypeDoc documentation in GitHub Pages
 on:
   push:
     branches: [ main ]
-
 permissions:
   contents: read
   pages: write
   id-token: write
-
 concurrency:
   group: pages
   cancel-in-progress: false
