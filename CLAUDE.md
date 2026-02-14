@@ -8,7 +8,7 @@
 - ESM only (`"type": "module"`)
 
 ## Commands
- 
+
 - `npm run build` — compile TypeScript to JavaScript
 - `npm run clean` — remove compiled output
 - `npm start` — run once with .env.local
@@ -30,4 +30,5 @@
 ## Testing
 
 - Use `node:test` and `node:assert/strict`
+- Use `asserttt` for type-level assertions
 - Test files go in `src/__tests__/` with `*.test.ts` suffix
