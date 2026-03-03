@@ -13,7 +13,6 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 24.x
           - 25.x
     name: Linting with Node.js ${{ matrix.node-version }}
     steps:
@@ -29,7 +28,6 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 24.x
           - 25.x
     name: Testing with Node.js ${{ matrix.node-version }}
     steps:

@@ -31,6 +31,22 @@ describe("main", () => {
         assert.ok(messages.some((m) => /Node\.js process options:/.test(m)))
     })
 
+    it("should use empty fallbacks when NODE_ENV and NODE_OPTIONS are not set", () => {
+        const savedEnv = process.env["NODE_ENV"]
+        const savedOptions = process.env["NODE_OPTIONS"]
+        delete process.env["NODE_ENV"]
+        delete process.env["NODE_OPTIONS"]
+        try {
+            main()
+            const messages = errorMock.mock.calls.map((c) => c.arguments[0])
+            assert.ok(messages.some((m) => /Node\.js environment: $/.test(m)))
+            assert.ok(messages.some((m) => /Node\.js process options:/.test(m)))
+        } finally {
+            if (savedEnv !== undefined) process.env["NODE_ENV"] = savedEnv
+            if (savedOptions !== undefined) process.env["NODE_OPTIONS"] = savedOptions
+        }
+    })
+
     it("should register SIGINT handler", () => {
         main()
 
@@ -38,6 +54,15 @@ describe("main", () => {
             (c) => c.arguments[0] === "SIGINT",
         )
         assert.ok(sigintCall, "SIGINT handler not registered")
+    })
+
+    it("should register SIGTERM handler", () => {
+        main()
+
+        const sigtermCall = onMock.mock.calls.find(
+            (c) => c.arguments[0] === "SIGTERM",
+        )
+        assert.ok(sigtermCall, "SIGTERM handler not registered")
     })
 
     it("should register uncaughtException handler", () => {
@@ -74,7 +99,26 @@ describe("main", () => {
             ),
         )
         assert.equal(exitMock.mock.callCount(), 1)
-        assert.equal(exitMock.mock.calls[0]?.arguments[0], 1)
+        assert.equal(exitMock.mock.calls[0]?.arguments[0], 0)
+    })
+
+    it("should exit on SIGTERM", () => {
+        main()
+
+        const sigtermCall = onMock.mock.calls.find(
+            (c) => c.arguments[0] === "SIGTERM",
+        )
+        assert.ok(sigtermCall)
+        const handler = sigtermCall.arguments[1]
+        handler("SIGTERM")
+
+        assert.ok(
+            errorMock.mock.calls.some((c) =>
+                /Received signal: SIGTERM/.test(c.arguments[0]),
+            ),
+        )
+        assert.equal(exitMock.mock.callCount(), 1)
+        assert.equal(exitMock.mock.calls[0]?.arguments[0], 0)
     })
 
     it("should exit on uncaughtException", () => {

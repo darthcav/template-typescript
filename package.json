@@ -1,7 +1,7 @@
 {
     "name": "template-typescript",
-    "description": "A general-purpose TypeScript project template for Node.js >= 24",
-    "version": "0.0.1",
+    "description": "A general-purpose TypeScript project template for Node.js >= 25",
+    "version": "0.1.0",
     "author": {
         "name": "darthcav"
     },
@@ -29,8 +29,8 @@
         "dist/**/*.d.tsx.map"
     ],
     "devDependencies": {
-        "@biomejs/biome": "2.3.15",
-        "@types/node": "25.2.3",
+        "@biomejs/biome": "2.4.5",
+        "@types/node": "25.3.3",
         "asserttt": "1.0.1",
         "shx": "0.4.0",
         "typedoc": "0.28.17"
@@ -40,7 +40,7 @@
         "url": "git@github.com:darthcav/template-typescript.git"
     },
     "engines": {
-        "node": ">=24"
+        "node": ">=25"
     },
     "scripts": {
         "\n===== Build =====": "",
@@ -52,7 +52,7 @@
         "\n===== Start =====": "",
         "start": "node --env-file=.env.local src/start.ts",
         "\n===== Test =====": "",
-        "test": "node --env-file=.env.local --test 'src/**/*.test.ts'",
+        "test": "node --env-file=.env.local --test --test-reporter=spec 'src/**/*.test.ts'",
         "test:coverage": "node --env-file=.env.local --experimental-test-coverage --test 'src/**/*.test.ts'",
         "\n===== Linter =====": "",
         "lint": "biome check .",

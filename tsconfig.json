@@ -9,6 +9,7 @@
         // Nothing is ever transpiled
         "target": "esnext", // sets up "src" accordingly
         "module": "nodenext", // sets up "moduleResolution"
+        "lib": ["esnext"],
         // Don't check .d.ts files
         "skipLibCheck": true,
         // Emptily imported modules must exist
@@ -30,6 +31,8 @@
         //========== Only JS at non-type level (type stripping etc.) ==========
         // Enforce keyword `type` for type imports etc.
         "verbatimModuleSyntax": true, // implies "isolatedModules"
+        // Enforce only erasable TS syntax (no enum, no parameter properties, etc.)
+        "erasableSyntaxOnly": true,
 
         //========== Use filename extension .ts in imports ==========
         "allowImportingTsExtensions": true,

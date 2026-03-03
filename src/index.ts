@@ -8,6 +8,7 @@ import pkg from "../package.json" with { type: "json" }
  * @remarks
  * Registers handlers for:
  * - `SIGINT` — graceful shutdown on Ctrl+C
+ * - `SIGTERM` — graceful shutdown on kill/Docker/Kubernetes
  * - `uncaughtException` — logs and exits on unhandled exceptions
  * - `unhandledRejection` — logs and exits on unhandled promise rejections
  *
@@ -29,11 +30,13 @@ export default function main(): void {
         `Node.js process options: ${execArgv.concat(env?.["NODE_OPTIONS"] ?? []).join(" | ")}`,
     )
 
-    // Handle SIGINT signal (Ctrl+C) for graceful shutdown
-    process.on("SIGINT", (signal) => {
-        console.error(`Received signal: ${signal}`)
-        process.exit(1)
-    })
+    // Handle SIGINT (Ctrl+C) and SIGTERM (kill/Docker/k8s) for graceful shutdown
+    for (const signal of ["SIGINT", "SIGTERM"] as const) {
+        process.on(signal, (signal) => {
+            console.error(`Received signal: ${signal}`)
+            process.exit(0)
+        })
+    }
 
     // Handle uncaught exceptions to prevent silent failures
     process.on("uncaughtException", (error, origin) => {
