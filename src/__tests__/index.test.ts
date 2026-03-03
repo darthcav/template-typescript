@@ -42,8 +42,12 @@ describe("main", () => {
             assert.ok(messages.some((m) => /Node\.js environment: $/.test(m)))
             assert.ok(messages.some((m) => /Node\.js process options:/.test(m)))
         } finally {
-            if (savedEnv !== undefined) process.env["NODE_ENV"] = savedEnv
-            if (savedOptions !== undefined) process.env["NODE_OPTIONS"] = savedOptions
+            if (savedEnv !== undefined) {
+                process.env["NODE_ENV"] = savedEnv
+            }
+            if (savedOptions !== undefined) {
+                process.env["NODE_OPTIONS"] = savedOptions
+            }
         }
     })
 

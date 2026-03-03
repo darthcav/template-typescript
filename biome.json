@@ -18,6 +18,9 @@
             "recommended": true,
             "complexity": {
                 "useLiteralKeys": "off"
+            },
+            "style": {
+                "useBlockStatements": "error"
             }
         }
     }
